@@ -30,7 +30,7 @@ public class ManufacturerRepositoryTest {
     
     @Test
     public void testWithSnakeCase() {
-        Assert.assertEquals("BMW", getByURL("/manufacturers?founded_year=1890")); 
+        Assert.assertEquals("BMW", getByURL("/manufacturers?founded_year=1890").getName()); 
     }
     
     private Manufacturer getByURL(String url) {
