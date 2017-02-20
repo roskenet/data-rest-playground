@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-@EnableHypermediaSupport(type = { HypermediaType.HAL })
+//@EnableHypermediaSupport(type = { HypermediaType.HAL })
 public class ManufacturerRepositoryTest {
 
     @Autowired
@@ -30,9 +30,14 @@ public class ManufacturerRepositoryTest {
     
     @Test
     public void testWithSnakeCase() {
-        Assert.assertEquals("BMW", getByURL("/manufacturers?founded_year=1890").getName()); 
+        Assert.assertEquals("BMW", getByURL("/manufacturers?founded_year=1890&name=BMW").getName()); 
     }
     
+    @Test(expected = IndexOutOfBoundsException.class) 
+    public void testEmptyResult() {
+        getByURL("/manufacturers?founded_year=1920");
+    }
+
     private Manufacturer getByURL(String url) {
         ResponseEntity<PagedResources<Manufacturer>> response =
                 restTemplate.exchange(url,
@@ -40,4 +45,5 @@ public class ManufacturerRepositoryTest {
                     });
         return (Manufacturer) response.getBody().getContent().toArray()[0];
     }
+    
 }
